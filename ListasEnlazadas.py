@@ -15,6 +15,32 @@ class ListaDePrioridad:
         self.tail = None
         self.size = -1
 
+    def verify_group_priority(self, NodoActual, Prioridad, CntPacientesIgualPrioridad = 0):
+        if not self.tail:
+            return
+        
+        if CntPacientesIgualPrioridad > 2:
+            self.obtain_group_names_to_update(self.tail, Prioridad)
+            return
+        
+        if NodoActual.value.prioridad == Prioridad:
+            self.verify_group_priority(NodoActual.prev, Prioridad, CntPacientesIgualPrioridad + 1)
+
+        if not NodoActual.prev:
+            return
+        
+        self.verify_group_priority(NodoActual.prev, Prioridad, CntPacientesIgualPrioridad)
+
+    def obtain_group_names_to_update(self, NodoActual, Prioridad):
+
+        if NodoActual.value.prioridad == Prioridad:
+            NodoActual.value.prioridad += 1
+
+        if not NodoActual.prev:
+            return
+        
+        self.obtain_group_names_to_update(NodoActual.prev, Prioridad)
+
     def append(self, NodoActual, Paciente):
         if not self.head:
             self.head = NodoListaDePrioridad(Paciente)
@@ -24,6 +50,7 @@ class ListaDePrioridad:
         
         if NodoActual.prev == None:
             if Paciente.prioridad > NodoActual.value.prioridad:
+                print("Head executed")
                 head_viejo = self.head
                 self.head = NodoListaDePrioridad(Paciente)
                 self.head.next = head_viejo
@@ -35,6 +62,7 @@ class ListaDePrioridad:
             
         if Paciente.prioridad < NodoActual.value.prioridad:
             if Paciente.prioridad < self.tail.value.prioridad:
+                print("Tail executed")
                 tail_viejo = self.tail
                 self.tail = NodoListaDePrioridad(Paciente)
                 self.tail.prev = tail_viejo
@@ -43,7 +71,8 @@ class ListaDePrioridad:
                 self.size += 1
 
                 return
-            
+        
+        if Paciente.prioridad < NodoActual.value.prioridad:
             NuevoNodo = NodoListaDePrioridad(Paciente)
             NodoActual_Next = NodoActual.next
 
@@ -54,6 +83,8 @@ class ListaDePrioridad:
             NuevoNodo.prev = NodoActual
 
             self.size += 1
+
+            self.verify_group_priority(self.tail, Paciente.prioridad)
 
             return
      
