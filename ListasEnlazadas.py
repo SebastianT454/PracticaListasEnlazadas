@@ -20,7 +20,7 @@ class ListaDePrioridad:
             return
         
         if CntPacientesIgualPrioridad > 2:
-            self.obtain_group_names_to_update(self.tail, Prioridad)
+            self.update_group_names_to_update(self.tail, Prioridad)
             return
         
         if NodoActual.value.prioridad == Prioridad:
@@ -31,7 +31,7 @@ class ListaDePrioridad:
         
         self.verify_group_priority(NodoActual.prev, Prioridad, CntPacientesIgualPrioridad)
 
-    def obtain_group_names_to_update(self, NodoActual, Prioridad):
+    def update_group_names_to_update(self, NodoActual, Prioridad):
 
         if NodoActual.value.prioridad == Prioridad:
             NodoActual.value.prioridad += 1
@@ -39,7 +39,7 @@ class ListaDePrioridad:
         if not NodoActual.prev:
             return
         
-        self.obtain_group_names_to_update(NodoActual.prev, Prioridad)
+        self.update_group_names_to_update(NodoActual.prev, Prioridad)
 
     def append(self, NodoActual, Paciente):
         if not self.head:
@@ -48,61 +48,63 @@ class ListaDePrioridad:
             self.size += 1
             return
         
-        if NodoActual.prev == None:
-            if Paciente.prioridad > NodoActual.value.prioridad:
-                print("Head executed")
-                head_viejo = self.head
-                self.head = NodoListaDePrioridad(Paciente)
-                self.head.next = head_viejo
+        if Paciente.prioridad < self.head.value.prioridad:
+            HeadViejo = self.head
+            NuevoHead = NodoListaDePrioridad(Paciente)
 
-                head_viejo.prev = self.head
-                self.size += 1
-                
-                return
-            
-        if Paciente.prioridad < NodoActual.value.prioridad:
-            if Paciente.prioridad < self.tail.value.prioridad:
-                print("Tail executed")
-                tail_viejo = self.tail
-                self.tail = NodoListaDePrioridad(Paciente)
-                self.tail.prev = tail_viejo
+            HeadViejo.prev = NuevoHead
+            NuevoHead.next = HeadViejo
 
-                tail_viejo.next = self.tail
-                self.size += 1
+            self.head = NuevoHead
+            self.size += 1
 
-                return
+            return
         
-        if Paciente.prioridad < NodoActual.value.prioridad:
+
+        if not NodoActual.next:
+            if (Paciente.prioridad >= self.tail.value.prioridad):
+                TailViejo = self.tail
+                NuevoTail = NodoListaDePrioridad(Paciente)
+
+                NuevoTail.prev = TailViejo
+                TailViejo.next = NuevoTail
+
+                self.tail = NuevoTail
+                self.size += 1
+
+                return
+            return
+        
+        if (Paciente.prioridad >= NodoActual.value.prioridad) and (Paciente.prioridad < NodoActual.next.value.prioridad):
             NuevoNodo = NodoListaDePrioridad(Paciente)
-            NodoActual_Next = NodoActual.next
+            NodoActualNext = NodoActual.next
+
+            NuevoNodo.prev = NodoActual
+            NuevoNodo.next = NodoActualNext
 
             NodoActual.next = NuevoNodo
-            NodoActual_Next.prev = NuevoNodo
-            
-            NuevoNodo.next = NodoActual_Next
-            NuevoNodo.prev = NodoActual
+            NodoActualNext.prev = NuevoNodo
 
             self.size += 1
 
-            self.verify_group_priority(self.tail, Paciente.prioridad)
-
             return
+        
      
-        self.append(NodoActual.prev, Paciente)
+        self.append(NodoActual.next, Paciente)
 
     # Funcion para imprimir toda la lista enlazada.
     def traverse(self, NodoActual, Nodo = 0):
-        if not self.tail:
+        if not self.head:
             return
         
         print(f"Valor Nodo {Nodo}:", NodoActual.value)
         #print("Prev Nodo:", NodoActual.prev)
         #print("Next Nodo:", NodoActual.next)
 
-        if not NodoActual.prev:
+        if not NodoActual.next:
             return
         
-        self.traverse(NodoActual.prev, Nodo + 1)
+        self.traverse(NodoActual.next, Nodo + 1)
 
     def delete_tail(self):
         if not self.tail:
@@ -192,3 +194,20 @@ class ListaDePrioridad:
             return
     
         self.update_node(NodoActual.prev, NombrePaciente, NuevaPrioridad)
+
+
+Dll = ListaDePrioridad()
+
+Paciente1 = Paciente("Juan", 16, "Fiebre", 2)
+Paciente2 = Paciente("Camila", 20, "Dolor de cabeza", 1)
+Paciente3 = Paciente("Mauricio", 32, "Diarrea", 4)
+Paciente4 = Paciente("Laura", 22, "Diarrea", 2)
+Paciente5 = Paciente("Leon", 14, "Diarrea", 1)
+
+Dll.append(Dll.head, Paciente1)
+Dll.append(Dll.head, Paciente2)
+#Dll.append(Dll.head, Paciente3)
+#Dll.append(Dll.head, Paciente4)
+#Dll.append(Dll.head, Paciente5)
+
+Dll.traverse(Dll.head)

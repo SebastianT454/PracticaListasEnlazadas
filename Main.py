@@ -24,7 +24,7 @@ while True:
         condicion = input("Ingrese la condición del paciente: ")
         prioridad = int(input("Ingrese el nivel de prioridad del paciente: "))
         paciente = Paciente(nombre, edad, condicion, prioridad)
-        Dll_Prioritaria.append(Dll_Prioritaria.tail, paciente)
+        Dll_Prioritaria.append(Dll_Prioritaria.head, paciente)
         print(f"Paciente agregado: {paciente}")
 
     elif opcion == "2":
@@ -32,16 +32,16 @@ while True:
         Pacientes = crear_pacientes_aleatorios(Cnt_Pacientes)
 
         for paciente in Pacientes:
-            Dll_Prioritaria.append(Dll_Prioritaria.tail, paciente)
+            Dll_Prioritaria.append(Dll_Prioritaria.head, paciente)
 
-        Dll_Prioritaria.traverse(Dll_Prioritaria.tail)
+        Dll_Prioritaria.traverse(Dll_Prioritaria.head)
 
     elif opcion == "3":
-        Paciente_con_mayor_prioridad = Dll_Prioritaria.delete_tail()
+        Paciente_con_mayor_prioridad = Dll_Prioritaria.delete_head()
         print(f"Paciente con mayor prioridad atendido: {Paciente_con_mayor_prioridad}")
 
     elif opcion == "4":
-        Dll_Prioritaria.traverse(Dll_Prioritaria.tail)
+        Dll_Prioritaria.traverse(Dll_Prioritaria.head)
 
     elif opcion == "5":
         Nombre = input("Ingrese el nombre del paciente cuya prioridad desea actualizar: ")
