@@ -107,7 +107,7 @@ class ListaDePrioridad:
         self.traverse(NodoActual.next, Nodo + 1)
 
     def delete_tail(self):
-        if not self.tail:
+        if not self.head:
             return "No existen pacientes"
         
         if self.tail == self.head:
@@ -132,7 +132,7 @@ class ListaDePrioridad:
             return Tail
         
     def delete_head(self):
-        if not self.tail:
+        if not self.head:
             return "No existen pacientes"
         
         if self.tail == self.head:
@@ -157,7 +157,7 @@ class ListaDePrioridad:
             return Head
 
     def update_node(self, NodoActual, NombrePaciente, NuevaPrioridad):
-        if not self.tail:
+        if not self.head:
             return
         
         if NombrePaciente == NodoActual.value.nombre:
@@ -169,13 +169,13 @@ class ListaDePrioridad:
             # Si es tail actualizarlo.
             if NodoActual.next == None:
                 self.delete_tail()
-                self.append(self.tail, PacienteObjeto)
+                self.append(self.head, PacienteObjeto)
                 return
 
             # Si es head actualizarlo.
             if NodoActual.prev == None:
                 self.delete_head()
-                self.append(self.tail, PacienteObjeto)
+                self.append(self.head, PacienteObjeto)
                 return
 
             Prev_NodoActual = NodoActual.prev
@@ -187,13 +187,16 @@ class ListaDePrioridad:
             NodoActual.next = None
             NodoActual.prev = None
 
-            self.append(self.tail, PacienteObjeto)
+            self.size -= 1
+            
+            self.append(self.head, PacienteObjeto)
+
             return
             
-        if not NodoActual.prev:
+        if not NodoActual.next:
             return
     
-        self.update_node(NodoActual.prev, NombrePaciente, NuevaPrioridad)
+        self.update_node(NodoActual.next, NombrePaciente, NuevaPrioridad)
 
 
 Dll = ListaDePrioridad()

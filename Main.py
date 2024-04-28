@@ -47,7 +47,7 @@ while True:
         Nombre = input("Ingrese el nombre del paciente cuya prioridad desea actualizar: ")
         Nueva_prioridad = int(input("Ingrese la nueva prioridad: "))
 
-        Dll_Prioritaria.update_node(Dll_Prioritaria.tail, Nombre, Nueva_prioridad)
+        Dll_Prioritaria.update_node(Dll_Prioritaria.head, Nombre, Nueva_prioridad)
 
     elif opcion == "6":
         print("¡Programa terminado!")
